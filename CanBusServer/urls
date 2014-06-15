@@ -1,0 +1,4 @@
+POST /CAN/{client_name}/{command}/?param1=val1&param2=val2
+
+Example:
+POST /CAN/altair/SetPort/?port=3&state=1
