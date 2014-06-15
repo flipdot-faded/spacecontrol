@@ -99,7 +99,7 @@ class CanBus(object):
 
         if (timeouterror == True):
             logger.error("no answer from CAN client. transmit string was: {0}".format(sendstring))
-            returnstring = "TIMEOUT"
+            raise Exception("CAN client response timeout")
         else:
             # look for separator "#" between payload and checksum (not present if string empty)
             pos = returnstring.find("#")
@@ -111,6 +111,6 @@ class CanBus(object):
                     returnstring = payload
                 else:
                     logger.error("wrong checksum from CAN client. received string was: {0}".format(returnstring))
-                    returnstring = ""
+                    raise Exception("CAN client send invalid checksum")
 
         return returnstring
