@@ -9,17 +9,17 @@ from time import *
 # import wlcd															# little module for tft control characters
 
 # Configuration
-error_log = True
-baudrate = 9600
-max_wait_for_rx_timeout = 2000
+ERROR_LOG = True
+BAUDRATE = 9600
+MAX_WAIT_FOR_RX_TIMEOUT = 2000
 # this is the character(s) at the end of a complete input line, sent by AVR via CAN
-eol_char_rx = chr(10)
+EOL_CHAR_RX = chr(10)
 # this is the character(s) at the end of an command sent by raspberry pi
-eol_char_tx = chr(13) + chr(10)
-max_buffer_length = 80
+EOL_CHAR_TX = chr(13) + chr(10)
+MAX_BUFFER_LENGTH = 80
 
 # initialise serial connection
-ser = serial.Serial("/dev/ttyAMA0", baudrate, xonxoff=False)
+ser = serial.Serial("/dev/ttyAMA0", BAUDRATE, xonxoff=False)
 
 
 # dump errorstring in error file, named "error_log_my-filename.py_.txt"
@@ -32,9 +32,9 @@ def log_error(errorstring):
     # build date and time string as CSV for excel import later on
     rightnow = current_time.strftime('%Y-%m-%d; %H:%M:%S;')
     # if complete send commands are pasted into error string, cr/lf char is removed
-    errorstring = errorstring.replace(eol_char_tx, "")
+    errorstring = errorstring.replace(EOL_CHAR_TX, "")
     # if complete received lines are pasted into error string, cr/lf char is removed
-    errorstring = errorstring.replace(eol_char_rx, "")
+    errorstring = errorstring.replace(EOL_CHAR_RX, "")
     errorfile.write(rightnow + ' "' + errorstring + '"' + '\n')
     errorfile.close()
 
@@ -57,11 +57,11 @@ def sercom(sendstring):
     returnstring = ""
     ser.flushInput()
     checksum = calculate_checksum(sendstring)
-    sendstring = sendstring + "#" + str(checksum) + eol_char_tx
+    sendstring = sendstring + "#" + str(checksum) + EOL_CHAR_TX
     ser.write(sendstring)
 
     # wait max max_wait_for_rx_timeout for new line(s) from serial input. if received line begins with ":", then discard it.
-    maxwait = max_wait_for_rx_timeout
+    maxwait = MAX_WAIT_FOR_RX_TIMEOUT
     while (maxwait > 0):
         # received character waiting in uart buffer
         if ser.inWaiting() > 0:
@@ -69,13 +69,13 @@ def sercom(sendstring):
             saveline = False
             # read one byte from serial input line
             s = ser.read()
-            if s == eol_char_rx:
+            if s == EOL_CHAR_RX:
                 saveline = True
             # received character is no control code
             elif ord(s) > 31:
                 # append received character to buffer
                 input_line = input_line + s
-                if len(input_line) >= max_buffer_length:
+                if len(input_line) >= MAX_BUFFER_LENGTH:
                     saveline = True
             if saveline == True:
                 pos = input_line.find(":")
@@ -95,7 +95,7 @@ def sercom(sendstring):
             maxwait = maxwait - 1
 
     if (timeouterror == True):
-        if error_log == True:
+        if ERROR_LOG == True:
             log_error("no answer from CAN client. transmit string was: " + sendstring)
             returnstring = "TIMEOUT"
     else:
@@ -108,7 +108,7 @@ def sercom(sendstring):
             if True:
                 returnstring = payload
             else:
-                if error_log == True:
+                if ERROR_LOG == True:
                     log_error("wrong checksum from CAN client. received string was: " + returnstring)
                     returnstring = ""
 
