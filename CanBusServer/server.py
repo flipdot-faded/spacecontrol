@@ -1,8 +1,6 @@
 # seriell einlesen ohne thread
 # UNGETESTET: das wegwerfen von empfangenen zeilen, die mit ":" beginnen!
 
-import datetime  # time and
-import __main__ as main  # main necessary for error logging in file
 import logging
 import serial
 from time import *
