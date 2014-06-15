@@ -4,12 +4,14 @@
 
 import datetime  # time and
 import __main__ as main  # main necessary for error logging in file
+import logging
 import serial
 from time import *
 # import wlcd															# little module for tft control characters
 
+logger = logging.Logger()
+logger.setLevel('debug')
 # Configuration
-ERROR_LOG = True
 BAUDRATE = 9600
 MAX_WAIT_FOR_RX_TIMEOUT = 2000
 # this is the character(s) at the end of a complete input line, sent by AVR via CAN
@@ -95,9 +97,8 @@ def sercom(sendstring):
             maxwait = maxwait - 1
 
     if (timeouterror == True):
-        if ERROR_LOG == True:
-            log_error("no answer from CAN client. transmit string was: " + sendstring)
-            returnstring = "TIMEOUT"
+        logger.error("no answer from CAN client. transmit string was: {0}".format(sendstring))
+        returnstring = "TIMEOUT"
     else:
         # look for separator "#" between payload and checksum (not present if string empty)
         pos = returnstring.find("#")
@@ -108,9 +109,8 @@ def sercom(sendstring):
             if True:
                 returnstring = payload
             else:
-                if ERROR_LOG == True:
-                    log_error("wrong checksum from CAN client. received string was: " + returnstring)
-                    returnstring = ""
+                logger.error("wrong checksum from CAN client. received string was: {0}".format(returnstring))
+                returnstring = ""
 
     return returnstring
 
