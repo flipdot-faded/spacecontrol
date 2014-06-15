@@ -13,7 +13,10 @@ class CanClient(object):
         self.bus = bus
 
     def set_port(self, port, state):
-        self.bus.send_command(self.name, )
+        return self.bus.send_command(self.name, 'setport', port, state)
+
+    def set_analog(self, state):
+        return self.bus.send_command(self.name, 'setana', state)
 
 
 class CanBus(object):
