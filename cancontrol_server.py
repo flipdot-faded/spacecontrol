@@ -21,13 +21,14 @@ MAX_BUFFER_LENGTH = 80
 # initialise serial connection
 ser = serial.Serial("/dev/ttyAMA0", BAUDRATE, xonxoff=False)
 
+
 def calculate_checksum(payload):
     # calculate simple checksum (sum over all bytes in payload)
     checksum = sum([ord(c) for c in payload])
     return checksum
 
 
-def sercom(sendstring):
+def send_command(sendstring):
     """Send command in sendstring on serial output
 
     Wait maximal max_wait_for_rx_timeout milliseconds for answer, typ. 2 seconds
@@ -98,17 +99,17 @@ def sercom(sendstring):
 while True:
     sendstring = ":altair setport 5 1"
     print "TX: -> " + sendstring
-    returnstring = sercom(sendstring)
+    returnstring = send_command(sendstring)
     print "TX: <- " + returnstring
 
     sendstring = ":altair setport 5 0"
     print "TX: -> " + sendstring
-    returnstring = sercom(sendstring)
+    returnstring = send_command(sendstring)
     print "TX: <- " + returnstring
 
     sendstring = ":altair getana 0"
     print "TX: -> " + sendstring
-    returnstring = sercom(sendstring)
+    returnstring = send_command(sendstring)
     print "TX: <- " + returnstring
 
 ser.close()
