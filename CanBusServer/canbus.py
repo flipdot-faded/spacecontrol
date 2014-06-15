@@ -15,8 +15,8 @@ class CanClient(object):
     def set_port(self, port, state):
         return self.bus.send_command(self.name, 'setport', port, state)
 
-    def set_analog(self, state):
-        return self.bus.send_command(self.name, 'setana', state)
+    def get_analog(self, port):
+        return self.bus.send_command(self.name, 'getana', port)
 
 
 class CanBus(object):
@@ -38,6 +38,7 @@ class CanBus(object):
         return CanClient(client_name, self)
 
     def send_command(self, client, command, *args):
+        args = (str(x) for x in args)
         command = ":{0} {1} {2}".format(client, command, ' '.join(args))
         return self._send_command(command)
 
