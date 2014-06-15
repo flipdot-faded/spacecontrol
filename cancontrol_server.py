@@ -2,9 +2,6 @@
 # seriell einlesen ohne thread
 # UNGETESTET: das wegwerfen von empfangenen zeilen, die mit ":" beginnen!
 
-# color_code = {"black":30, "red":31, "green":32, "yellow":33, "blue":34, "magenta":35, "cyan":36, "white":37}
-# write ("\033["+str(color_code[fg])+";"+str(color_code[bg]+10)+"m") # color code for background is foreground code + 10
-
 import datetime  # time and
 import __main__ as main  # main necessary for error logging in file
 import serial
@@ -21,10 +18,7 @@ eol_char_rx = chr(10)
 eol_char_tx = chr(13) + chr(10)
 max_buffer_length = 80
 
-
-# sleep (30)														# if called by cronjob
-
-# initialise serial connection 
+# initialise serial connection
 ser = serial.Serial("/dev/ttyAMA0", baudrate, xonxoff=False)
 
 
@@ -132,37 +126,9 @@ while True:
     returnstring = sercom(sendstring)
     print "TX: <- " + returnstring
 
-    # sendstring = ":altair setport 4 0"
-    #	print "TX: -> " + sendstring
-    #	returnstring = sercom(sendstring)
-    #	print "TX: <- " + returnstring
-
-    #	sendstring = ":altair setport 4 1"
-    #	print "TX: -> " + sendstring
-    #	returnstring = sercom(sendstring)
-    #	print "TX: <- " + returnstring
-
-    #	sendstring = ":altair setport 3 0"
-    #	print "TX: -> " + sendstring
-    #	returnstring = sercom(sendstring)
-    #	print "TX: <- " + returnstring
-
-    #	sendstring = ":altair setport 3 1"
-    #	print "TX: -> " + sendstring
-    #	returnstring = sercom(sendstring)
-    #	print "TX: <- " + returnstring
-
-    # sendstring = ":altair petana 0"
-    # print "TX: -> " + sendstring
-    # returnstring = sercom(sendstring)
-    # print "TX: <- " + returnstring
-
-
-
     sendstring = ":altair getana 0"
     print "TX: -> " + sendstring
     returnstring = sercom(sendstring)
     print "TX: <- " + returnstring
 
 ser.close()
-
