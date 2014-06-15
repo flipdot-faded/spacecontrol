@@ -23,24 +23,6 @@ MAX_BUFFER_LENGTH = 80
 # initialise serial connection
 ser = serial.Serial("/dev/ttyAMA0", BAUDRATE, xonxoff=False)
 
-
-# dump errorstring in error file, named "error_log_my-filename.py_.txt"
-def log_error(errorstring):
-    my_filename = (main.__file__)
-    # add "error_log"
-    errorfile_name = "error_log_" + my_filename + "_.txt"
-    errorfile = open(errorfile_name, "a")
-    current_time = datetime.datetime.now()
-    # build date and time string as CSV for excel import later on
-    rightnow = current_time.strftime('%Y-%m-%d; %H:%M:%S;')
-    # if complete send commands are pasted into error string, cr/lf char is removed
-    errorstring = errorstring.replace(EOL_CHAR_TX, "")
-    # if complete received lines are pasted into error string, cr/lf char is removed
-    errorstring = errorstring.replace(EOL_CHAR_RX, "")
-    errorfile.write(rightnow + ' "' + errorstring + '"' + '\n')
-    errorfile.close()
-
-
 def calculate_checksum(payload):
     # calculate simple checksum (sum over all bytes in payload)
     checksum = sum([ord(c) for c in payload])
