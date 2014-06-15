@@ -1,4 +1,3 @@
-#
 # seriell einlesen ohne thread
 # UNGETESTET: das wegwerfen von empfangenen zeilen, die mit ":" beginnen!
 
@@ -7,7 +6,6 @@ import __main__ as main  # main necessary for error logging in file
 import logging
 import serial
 from time import *
-# import wlcd															# little module for tft control characters
 
 logger = logging.Logger()
 logger.setLevel('debug')
