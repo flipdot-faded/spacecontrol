@@ -25,14 +25,16 @@ class CanBus(object):
                  rx_timeout=2000,
                  eol_char_rx=chr(10),
                  eol_char_tx=chr(13) + chr(10),
-                 buffer_length=80):
+                 buffer_length=80,
+                 device="/dev/ttyAMA0"):
         self.baudrate = baudrate
         self.rx_timeout = rx_timeout
         self.eol_char_rx = eol_char_rx
         self.eol_char_tx = eol_char_tx
         self.buffer_length = buffer_length
+        self.device = device
 
-        self.serial = serial.Serial("/dev/ttyAMA0", self.baudrate, xonxoff=False)
+        self.serial = serial.Serial(self.device, self.baudrate, xonxoff=False)
 
     def get_can_client(self, client_name):
         return CanClient(client_name, self)
