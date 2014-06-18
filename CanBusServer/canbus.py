@@ -4,6 +4,8 @@ import serial
 from time import sleep
 import logging
 
+from errors import CANException
+
 logger = logging.getLogger(__name__)
 
 
@@ -101,7 +103,7 @@ class CanBus(object):
 
         if (timeouterror == True):
             logger.error("no answer from CAN client. transmit string was: {0}".format(sendstring))
-            raise Exception("CAN client response timeout")
+            raise CANException("CAN client response timeout")
         else:
             # look for separator "#" between payload and checksum (not present if string empty)
             pos = returnstring.find("#")
@@ -113,6 +115,6 @@ class CanBus(object):
                     returnstring = payload
                 else:
                     logger.error("wrong checksum from CAN client. received string was: {0}".format(returnstring))
-                    raise Exception("CAN client send invalid checksum")
+                    raise CANException("CAN client send invalid checksum")
 
         return returnstring

@@ -1,0 +1,2 @@
+class CANException(Exception):
+    pass
