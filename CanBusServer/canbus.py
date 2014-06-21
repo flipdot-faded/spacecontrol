@@ -47,7 +47,7 @@ class CanBus(object):
         return self._send_command(command)
 
     # legacy code
-    def _calculate_checksum(payload):
+    def _calculate_checksum(self, payload):
         # calculate simple checksum (sum over all bytes in payload)
         checksum = sum([ord(c) for c in payload])
         return checksum
