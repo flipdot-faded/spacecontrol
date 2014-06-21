@@ -17,8 +17,21 @@ class CanClient(object):
     def set_port(self, port, state):
         return self.bus.send_command(self.name, 'setport', port, state)
 
+    def set_rgb(self, R, G, B):
+        return self.bus.send_command(self.name, "setrgb", R, G, B)
+
+    def set_servo(self, servo_no, servo_angle):
+        return self.bus.send_command(self.name, "setservo", servo_no, servo_angle)
+
     def get_analog(self, port):
         return self.bus.send_command(self.name, 'getana', port)
+
+    def get_port(self, port):
+        return self.bus.send_command(self.name, "getport", port)
+
+    def get_temp(self):
+        return self.bus.send_command(self.name, "gettemp")
+
 
 
 class CanBus(object):

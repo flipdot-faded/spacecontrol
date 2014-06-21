@@ -46,6 +46,18 @@ def get_analog(client_name):
     client = canbus.get_can_client(client_name)
     return client.get_analog(port)
 
+@app.route('/<client_name>/SetRgb', methods=['POST'])
+def set_rgb(client_name):
+    try:
+        R = int(request.args.get('R', -1))
+        G = int(request.args.get('G', -1))
+        B = int(request.args.get('B', -1))
+    except TypeError:
+        logger.error("invalid RGB")
+        abort(400)
+    client = canbus.get_can_client(client_name)
+    return client.set_rgb(R, G, B)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=PORT)
