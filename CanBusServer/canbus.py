@@ -49,7 +49,7 @@ class CanBus(object):
         self.buffer_length = buffer_length
         self.device = device
 
-        self.serial = None#serial.Serial(self.device, self.baudrate, xonxoff=False)
+        self.serial = serial.Serial(self.device, self.baudrate, xonxoff=False)
 
     def get_can_client(self, client_name):
         return CanClient(client_name, self)
