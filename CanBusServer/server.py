@@ -17,21 +17,39 @@ canbus = CanBus()
 @app.route('/<client_name>/SetPort', methods=['POST'])
 def set_port(client_name):
     try:
-        port = int(request.args.get('port', -1))
+        port = int(request.args.get('port', None))
     except TypeError:
         logger.error("invalid port")
         abort(400)
     try:
-        state = int(request.args.get('state', -1))
+        state = int(request.args.get('state', None))
     except TypeError:
         logger.error("invalid port state")
         abort(400)
     print port, state
-    if port == -1 or state == -1:
+    if port is None or state is None:
         logger.error("invalid port or state")
         abort(400)
     client = canbus.get_can_client(client_name)
     return client.set_port(port, state)
+
+@app.route('/<client_name>/SetServo', methods=['POST'])
+def set_port(client_name):
+    try:
+        servo_id = int(request.args.get('id', None))
+    except TypeError:
+        logger.error("invalid servo id")
+        abort(400)
+    try:
+        servo_angle = int(request.args.get('angle', None))
+    except TypeError:
+        logger.error("invalid angle")
+        abort(400)
+    if servo_id is None or servo_angle is None:
+        logger.error("invalid servo id or angle")
+        abort(400)
+    client = canbus.get_can_client(client_name)
+    return client.set_port(servo_id, servo_angle)
 
 @app.route('/<client_name>/GetAnalog', methods=['GET'])
 def get_analog(client_name):
@@ -45,6 +63,24 @@ def get_analog(client_name):
         abort(400)
     client = canbus.get_can_client(client_name)
     return client.get_analog(port)
+
+@app.route('/<client_name>/GetPort', methods=['GET'])
+def get_analog(client_name):
+    try:
+        port = int(request.args.get('port', -1))
+    except TypeError:
+        logger.error("invalid port")
+        abort(400)
+    if port == -1:
+        logger.error("invalid port")
+        abort(400)
+    client = canbus.get_can_client(client_name)
+    return client.get_port(port)
+
+@app.route('/<client_name>/GetTemperature', methods=['GET'])
+def get_analog(client_name):
+    client = canbus.get_can_client(client_name)
+    return client.get_temp()
 
 @app.route('/<client_name>/SetRgb', methods=['POST'])
 def set_rgb(client_name):
