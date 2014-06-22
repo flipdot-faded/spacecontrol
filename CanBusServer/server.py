@@ -26,10 +26,6 @@ def set_port(client_name):
     except TypeError:
         logger.error("invalid port state")
         abort(400)
-    print port, state
-    if port is None or state is None:
-        logger.error("invalid port or state")
-        abort(400)
     client = canbus.get_can_client(client_name)
     return client.set_port(port, state)
 
@@ -44,9 +40,6 @@ def set_port(client_name):
         servo_angle = int(request.args.get('angle', None))
     except TypeError:
         logger.error("invalid angle")
-        abort(400)
-    if servo_id is None or servo_angle is None:
-        logger.error("invalid servo id or angle")
         abort(400)
     client = canbus.get_can_client(client_name)
     return client.set_port(servo_id, servo_angle)
