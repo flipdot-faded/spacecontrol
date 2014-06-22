@@ -2,6 +2,7 @@
 # UNGETESTET: das wegwerfen von empfangenen zeilen, die mit ":" beginnen!
 
 import logging
+import struct
 
 from flask import Flask, request, abort
 
@@ -82,8 +83,13 @@ def set_rgb(client_name):
         g = int(request.args.get('G', -1))
         b = int(request.args.get('B', -1))
     except TypeError:
-        logger.error("invalid RGB")
-        abort(400)
+        hexstr = request.args.get('hex', None)
+        if not hexstr:
+            logger.error("invalid RGB")
+            abort(400)
+        # TODO: may require some try / except clause
+        rgb_data = hexstr.decode('hex')
+        r, g, b = struct.unpack('BBB', rgb_data)
     client = canbus.get_can_client(client_name)
     return client.set_rgb(r, g, b)
 
