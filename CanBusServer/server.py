@@ -31,7 +31,7 @@ def set_port(client_name):
     return client.set_port(port, state)
 
 @app.route('/<client_name>/SetServo', methods=['POST'])
-def set_port(client_name):
+def set_servo(client_name):
     try:
         servo_id = int(request.args.get('id', None))
     except TypeError:
@@ -59,7 +59,7 @@ def get_analog(client_name):
     return client.get_analog(port)
 
 @app.route('/<client_name>/GetPort', methods=['GET'])
-def get_analog(client_name):
+def get_port(client_name):
     try:
         port = int(request.args.get('port', -1))
     except TypeError:
@@ -72,7 +72,7 @@ def get_analog(client_name):
     return client.get_port(port)
 
 @app.route('/<client_name>/GetTemperature', methods=['GET'])
-def get_analog(client_name):
+def get_temperature(client_name):
     client = canbus.get_can_client(client_name)
     return client.get_temp()
 
