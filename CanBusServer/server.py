@@ -7,6 +7,7 @@ import struct
 from flask import Flask, request, abort
 
 from canbus import CanBus
+from hutschiene import Hutschiene
 
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
@@ -93,6 +94,12 @@ def set_rgb(client_name):
     client = canbus.get_can_client(client_name)
     return client.set_rgb(r, g, b)
 
+@app.route('/Hutschiene/OrangeLight', methods=['POST'])
+def set_orange_light(client_name):
+    state = bool(request.args.get('state', True))
+    schiene = Hutschiene()
+    schiene.set_orange_light(state)
+    return state
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=PORT)
