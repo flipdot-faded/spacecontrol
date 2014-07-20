@@ -15,7 +15,7 @@ PORT = 8080
 
 canbus = CanBus()
 
-@app.route('/<client_name>/SetPort', methods=['POST'])
+@app.route('/CanBus/<client_name>/SetPort', methods=['POST'])
 def set_port(client_name):
     try:
         port = int(request.args.get('port', None))
@@ -30,7 +30,7 @@ def set_port(client_name):
     client = canbus.get_can_client(client_name)
     return client.set_port(port, state)
 
-@app.route('/<client_name>/SetServo', methods=['POST'])
+@app.route('/CanBus/<client_name>/SetServo', methods=['POST'])
 def set_servo(client_name):
     try:
         servo_id = int(request.args.get('id', None))
@@ -45,7 +45,7 @@ def set_servo(client_name):
     client = canbus.get_can_client(client_name)
     return client.set_port(servo_id, servo_angle)
 
-@app.route('/<client_name>/GetAnalog', methods=['GET'])
+@app.route('/CanBus/<client_name>/GetAnalog', methods=['GET'])
 def get_analog(client_name):
     try:
         port = int(request.args.get('port', -1))
@@ -58,7 +58,7 @@ def get_analog(client_name):
     client = canbus.get_can_client(client_name)
     return client.get_analog(port)
 
-@app.route('/<client_name>/GetPort', methods=['GET'])
+@app.route('/CanBus/<client_name>/GetPort', methods=['GET'])
 def get_port(client_name):
     try:
         port = int(request.args.get('port', -1))
@@ -71,12 +71,12 @@ def get_port(client_name):
     client = canbus.get_can_client(client_name)
     return client.get_port(port)
 
-@app.route('/<client_name>/GetTemperature', methods=['GET'])
+@app.route('/CanBus/<client_name>/GetTemperature', methods=['GET'])
 def get_temperature(client_name):
     client = canbus.get_can_client(client_name)
     return client.get_temp()
 
-@app.route('/<client_name>/SetRgb', methods=['POST'])
+@app.route('/CanBus/<client_name>/SetRgb', methods=['POST'])
 def set_rgb(client_name):
     try:
         r = int(request.args.get('R', -1))
