@@ -95,7 +95,7 @@ def set_rgb(client_name):
     return client.set_rgb(r, g, b)
 
 @app.route('/Hutschiene/OrangeLight', methods=['POST'])
-def set_orange_light(client_name):
+def set_orange_light():
     state = bool(request.args.get('state', True))
     schiene = Hutschiene()
     schiene.set_orange_light(state)
