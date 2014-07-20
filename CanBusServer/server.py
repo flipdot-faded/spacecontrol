@@ -96,10 +96,10 @@ def set_rgb(client_name):
 
 @app.route('/Hutschiene/OrangeLight', methods=['POST'])
 def set_orange_light():
-    state = bool(request.args.get('state', True))
+    state = request.args.get('state', 'true') == 'true'
     schiene = Hutschiene()
     schiene.set_orange_light(state)
-    return state
+    return 'ok'
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=PORT)
