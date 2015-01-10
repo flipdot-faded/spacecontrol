@@ -32,6 +32,9 @@ class CanClient(object):
     def get_temp(self):
         return self.bus.send_command(self.name, "gettemp")
 
+    def send_cmd(self, cmd, *params):
+        return self.bus.send_command(self.name, cmd, params)
+
 
 
 class CanBus(object):
