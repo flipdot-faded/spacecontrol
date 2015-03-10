@@ -3,6 +3,7 @@
 import serial
 from time import sleep
 import logging
+logging.basicConfig()
 
 from errors import CANException
 
@@ -92,7 +93,7 @@ class CanBus(object):
                 saveline = False
                 # read one byte from serial input line
                 s = self.serial.read()
-                if s == self.eol_char_rx:
+                if s == self.eol_char_rx or s == '\n' or s == '\r':
                     saveline = True
                 # received character is no control code
                 elif ord(s) > 31:
