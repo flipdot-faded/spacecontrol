@@ -68,6 +68,15 @@ function shutdownMachines(callback) {
     exec(command);
   });
 
+  var shutdownDir = '/home/pi/spacecontrol/spaceShutdown/shutdown.d';
+  fs.readdirSync(shutdownDir).forEach(function(item) { 
+    exec("sh "+shutdownDir+"/"+item);
+  });
+
+  request.post('http://hutschienenpi:8080/Hutschiene/OrangeLight?state=0', function(err){
+    if(err) console.log(err);
+  });
+
   // shut down the energy
   setTimeout(function(){
     request.post('http://hutschienenpi:8080/CanBus/regulus/SetPort?port=0&state=0');
@@ -84,4 +93,8 @@ function readDoorStatus(callback){
 
 function unixNow(){
   return Math.round( new Date().getTime()/1000);
+}
+
+module.exports = {
+  doShutdown: shutdownMachines
 }
