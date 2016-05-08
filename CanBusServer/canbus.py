@@ -33,6 +33,18 @@ class CanClient(object):
     def get_temp(self):
         return self.bus.send_command(self.name, "gettemp")
 
+    def get_act_temp(self):
+        return "{:10.2f}".format((int(self.bus.send_command(self.name, "getActTemp"))/100.0))
+
+    def get_target_temp(self):
+        return "%d" % (int(self.bus.send_command(self.name, "getTargetTemp"))/100)
+
+    def get_heater_valve(self):
+        return "%d" % (int(self.bus.send_command(self.name, "getActValve")))
+
+    def set_target_temp(self, temp):
+        return self.bus.send_command(self.name, "setTargetTemp", temp)
+
     def send_cmd(self, cmd, *params):
         return self.bus.send_command(self.name, cmd, params)
 
@@ -53,7 +65,7 @@ class CanBus(object):
         self.buffer_length = buffer_length
         self.device = device
 
-        self.serial = serial.Serial(self.device, self.baudrate, xonxoff=False)
+        self.serial = serial.Serial(self.device, self.baudrate, xonxoff=False, timeout=1)
 
     def get_can_client(self, client_name):
         return CanClient(client_name, self)
@@ -79,23 +91,32 @@ class CanBus(object):
         timeouterror = True
         input_line = ""
         returnstring = ""
-        self.serial.flushInput()
         checksum = self._calculate_checksum(sendstring)
         sendstring = sendstring + "#" + str(checksum) + self.eol_char_tx
+        self.serial.flushInput()
         self.serial.write(sendstring)
-
+        print sendstring
         # wait max max_wait_for_rx_timeout for new line(s) from serial input. if received line begins with ":", then discard it.
         maxwait = self.rx_timeout
+
+
         while (maxwait > 0):
             # received character waiting in uart buffer
-            if self.serial.inWaiting() > 0:
+            waiting = self.serial.inWaiting()
+            if  waiting > 0:
+                #print "waiting: "+str(waiting)
                 # reset flag
                 saveline = False
                 # read one byte from serial input line
                 s = self.serial.read()
+                #print "s was: "+s
+                if len(s) == 0:
+                    continue
                 if s == self.eol_char_rx or s == '\n' or s == '\r':
-                    saveline = True
-                # received character is no control code
+                    #print "----w"
+                    if len(input_line) > 0:
+                        saveline = True
+                        # received character is no control code
                 elif ord(s) > 31:
                     # append received character to buffer
                     input_line = input_line + s
@@ -130,8 +151,13 @@ class CanBus(object):
                 # if checksum_calc == int(checksum_received):
                 if True:
                     returnstring = payload
+
                 else:
                     logger.error("wrong checksum from CAN client. received string was: {0}".format(returnstring))
                     raise CANException("CAN client send invalid checksum")
-
+            else:
+                logger.error("no checksum found")
+                raise CANException("no checksum found")
+        print returnstring
         return returnstring
+
