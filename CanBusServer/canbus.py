@@ -2,6 +2,7 @@
 
 import serial
 from time import sleep
+from random import randint
 import logging
 logging.basicConfig()
 
@@ -59,7 +60,7 @@ class CanClient(object):
 class CanBus(object):
     def __init__(self,
                  baudrate=9600,
-                 rx_timeout=2000,
+                 rx_timeout=500,
                  eol_char_rx=chr(10),
                  eol_char_tx=chr(13) + chr(10),
                  buffer_length=80,
@@ -79,7 +80,16 @@ class CanBus(object):
     def send_command(self, client, command, *args):
         args = (str(x) for x in args)
         command = ":{0} {1} {2}".format(client, command, ' '.join(args))
-        return self._send_command(command)
+        error = None
+        for i in range(10):
+            try:
+                return self._send_command(command)
+            except Exception as e:
+                error = e
+                sleep(randint(2,20)/1000.0)
+                pass
+        raise error
+
 
     # legacy code
     def _calculate_checksum(self, payload):
