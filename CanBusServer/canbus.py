@@ -37,7 +37,13 @@ class CanClient(object):
         return "{:10.2f}".format((int(self.bus.send_command(self.name, "getActTemp"))/100.0))
 
     def get_target_temp(self):
-        return "%d" % (int(self.bus.send_command(self.name, "getTargetTemp"))/100)
+        ret = self.bus.send_command(self.name, "getTargetTemp")
+	try:
+            ret = "{}".format(int(ret)/100)
+        except:
+            return ret
+        return ret
+        #return "%d" % (int(self.bus.send_command(self.name, "getTargetTemp"))/100)
 
     def get_heater_valve(self):
         return "%d" % (int(self.bus.send_command(self.name, "getActValve")))
