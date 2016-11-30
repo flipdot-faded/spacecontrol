@@ -10,9 +10,9 @@ class Hutschiene(Thread):
 
     def set_orange_light(self, state):
         if(state == True):
-            subprocess.call("/home/pi/wiringPi/orange_an.sh")
+            subprocess.call("/home/canbus/wiringPi/orange_an.sh")
         else:
-            subprocess.call("/home/pi/wiringPi/orange_aus.sh")
+            subprocess.call("/home/canbus/wiringPi/orange_aus.sh")
 
     def set_red_light(self, state, blink=False):
         if blink:
@@ -22,9 +22,9 @@ class Hutschiene(Thread):
 
     def red_light_blink(self, duration=30):
         for i in range(0,int((duration/4))):
-            subprocess.call("/home/pi/wiringPi/drehLampe_an.sh")
+            subprocess.call("/home/canbus/wiringPi/drehLampe_an.sh")
             sleep(2)
-            subprocess.call("/home/pi/wiringPi/drehLampe_aus.sh")
+            subprocess.call("/home/canbus/wiringPi/drehLampe_aus.sh")
             sleep(2)
 
 
