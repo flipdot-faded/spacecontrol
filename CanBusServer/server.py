@@ -106,7 +106,7 @@ def get_heater_valve(client_name):
         lastHeaterValve = client.get_heater_valve()
 	return lastHeaterValve
     except:
-        return lastHeaterValve
+	abort(500)
 
 @app.route('/CanBus/<client_name>/GetActTemp', methods=['GET'])
 def get_act_temp(client_name):
@@ -116,7 +116,7 @@ def get_act_temp(client_name):
         lastActTemp = client.get_act_temp()
 	return lastActTemp
     except:
-        return lastActTemp
+	abort(500)
 
 @app.route('/CanBus/<client_name>/GetTargetTemp', methods=['GET'])
 def get_target_temp(client_name):
@@ -126,7 +126,7 @@ def get_target_temp(client_name):
         lastSetTemp = client.get_target_temp()
         return lastSetTemp
     except CANException:
-        return lastSetTemp
+        abort(500)
 
 @app.route('/CanBus/<client_name>/SetTargetTemp', methods=['GET'])
 def set_target_temp(client_name):
